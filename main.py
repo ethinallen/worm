@@ -4,30 +4,33 @@ import os
 class worm():
 
     def __init__(self):
-        # counting a lot of things
-        count = 0
-
-        # the initial path that we are searching along
-        path = '/Library/Python/2.7/site-packages'
 
         # list of directories
-        dirs = []
+        self.dirs = []
+        # list of paths
+        self.paths = []
 
-        for root, directories, files in os.walk(path):
-            dirs.append(directories)
+        # the initial path that we are searching along
+        self.path = '/Library/Python/3.7/lib/python/site-packages'
+
+        for root, directories, files in os.walk(self.path):
+            self.dirs.append(directories)
 
         # we only want the first element
-        dirs = dirs[0]
+        self.dirs = self.dirs[0]
 
         # find every python file that is not a cache file
-        for dir in dirs:
-            for root, directories, files in os.walk('/'.join([path,dir])):
+        for dir in self.dirs:
+            for root, directories, files in os.walk('/'.join([self.path,dir])):
                 for file in files:
                     # filters out the cache file
                     if '.py' in file and '.pyc' not in file:
-                        count += 1
-                        print('/'.join([path,dir,file]))
-        print(count)
+                        self.paths.append('/'.join([self.path,dir,file]))
 
 if __name__ =='__main__':
+    # make a worm instance
     worm = worm()
+
+    for path in worm.paths:
+        with open(path, 'r') as file:
+            print(file)
