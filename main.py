@@ -12,7 +12,7 @@ class worm():
         self.paths = []
 
         # the virus that we are inserting into
-        self.virus = '# this is a shitty payload but it is mine\n# and there is nothing you can do about it'
+        self.virus = '# this is a shitty payload but it is mine\n# and there is nothing you can do about it\n'
 
         # the initial path that we are searching along
         self.path = '/Users/Drew/Projects/garbage'
