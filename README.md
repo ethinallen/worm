@@ -4,7 +4,7 @@
 ## to add function to worm: add the attribute to worm and call it in worm.infect()
 
 
-# CURRENTLY: WRITES ENTIRE ECNRYPTED VIRUS TO TXT FILE
+# CURRENTLY: WRITES ENTIRE ECNRYPTED VIRUS TO ALL FILES IN SPECIFIED DIRECTORY
 
 
 
